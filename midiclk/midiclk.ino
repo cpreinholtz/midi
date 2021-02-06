@@ -9,17 +9,17 @@ Midi clock out with 24 times faster period per midi spec
 
     Button Interface
       Arduino 5v          -> button 1 
-      arduino pin 3       <- button 2
+      arduino pin d6       <- button 2
       Arduino GND         -> button 3
 
     Pot Interface
       Arduino 5v          -> pot 1 
-      arduino pin A5      <- pot 2
+      arduino pin A3      <- pot 2
       Arduino GND         -> pot 3
       
     
     Pulse interface (TS 3.5mm)
-        Arduino pin 2      <- Pulse TIP
+        Arduino pin d10      <- Pulse TIP
         Arduino GND         <- Pulse Sleeve
         
     MIDI interface (TRS 3.5mm)
@@ -37,18 +37,21 @@ Midi clock out with 24 times faster period per midi spec
     if the button is 1, then the midi bpm is controlled by the pulse bpm
       if the pulse is lost (no change) for an extra quarternote, the midi out clk will continue at the last known bpm
 
+  known iddues / limitations:
+    must unplug midi out in order to reprogram
+
   
 */
 
 #define MIDI_SYSRT_CLK 0xF8
 
-#define PULSE_PIN 2
+#define PULSE_PIN 10
 
-#define BUTTON_PIN 3
+#define BUTTON_PIN 6
 
-#define POT_PIN A5
+#define POT_PIN A3
 
-#define TESTM
+//#define TESTM
 
 void setup() {
     // Set MIDI baud rate:
@@ -154,8 +157,7 @@ void do_now(unsigned long currentMicros){
     
     midiSentThisPulse = midiSentThisPulse+1;
 
-#ifdef TESTM
-       Serial.println("sending midi pulse");
+#ifdef TESTM                                                                                                                                                                                                                             .println("sending midi pulse");
        Serial.println(midiSentThisPulse);
 #endif
 
