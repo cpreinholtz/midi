@@ -9,9 +9,11 @@ seperate silencer from choordmaker? not necisary really, may speed up execution 
 todo features
 finish test enviroment for pure C
 make pure silencer (validates choords are in a key)
+make keyboard split
 make clocking scheme
 make looper
 make jammer
+
 integrate with arduino midi
 
 
