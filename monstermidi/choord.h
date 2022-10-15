@@ -14,12 +14,7 @@ class ChordMaker{
         static const int notesPerScale = 7;
         static const byte  minorHalfSteps[notesPerScale];
 
-        byte mKey;//key is the base key that we are playing in, for now always a minor key.  only 0 to 11 allowed        
-        byte mRoot;//root is the root note of the triad, in midi byte form
-        bool mValid;//check and see if the root is even part of the scale
-        byte mTriadFirst;
-        byte mTriadMiddle;
-        byte mTriadLast;
+
 
 
         ChordMaker(){
@@ -60,6 +55,9 @@ class ChordMaker{
         byte getKey(){
             return mKey;
         }
+        int getOffset() {
+            return mOffset;
+        }
         bool getValid(){
             return mValid;
         }
@@ -79,6 +77,12 @@ class ChordMaker{
         }
 
     private:
+        byte mKey;//key is the base key that we are playing in, for now always a minor key.  only 0 to 11 allowed        
+        byte mRoot;//root is the root note of the triad, in midi byte form
+        bool mValid;//check and see if the root is even part of the scale
+        byte mTriadFirst;
+        byte mTriadMiddle;
+        byte mTriadLast;
         int mOffset;
 
         //offset in tems of notes IN THE SCALE, used to figure out where we are in the half step array
