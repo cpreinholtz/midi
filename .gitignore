@@ -1,10 +1,6 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
-
-/monstermidi/.vs
-/monstermidi/x64/Debug
-/monstermidi/vsproj.vcxproj.user
-/monstermidi/vsproj.vcxproj.filters
-/monstermidi/vsproj.vcxproj
-/monstermidi/vsproj.sln
+﻿*/.vs
+*/x64/Debug
+*/vsproj.vcxproj.user
+*/vsproj.vcxproj.filters
+*/vsproj.vcxproj
+*/vsproj.sln
