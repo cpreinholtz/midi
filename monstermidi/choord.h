@@ -3,15 +3,16 @@
 #define CHOORD_H
 #ifdef ARDUINO_TARGET
 #else
+#include <cstdint>
     typedef uint8_t byte ;
 #endif
 
 class ChordMaker{
     public:
 
-        const int notesPerOctave = 12;
-        const int notesPerScale = 7;
-        const byte [notesPerScale] minorHalfSteps = [2,1,2,2,1,2,2];
+        static const int notesPerOctave = 12;
+        static const int notesPerScale = 7;
+        static const byte  minorHalfSteps[notesPerScale];
 
         byte mKey;//key is the base key that we are playing in, for now always a minor key.  only 0 to 11 allowed        
         byte mRoot;//root is the root note of the triad, in midi byte form
@@ -27,11 +28,15 @@ class ChordMaker{
             setTriad();
         }
 
+
+        //*******************************************************
+        //SETTERS
+        //*******************************************************
         void setKey(byte key){
             byte setTo = key%notesPerOctave;//ensure value is from 0 to 11
             if (mKey !=setTo){
                 mKey = setTo;
-                checkRoot();
+                calculateOffset();
                 setTriad();
             }
         }
@@ -39,33 +44,22 @@ class ChordMaker{
         void setRoot(byte root){
             if (mRoot !=root){
                 mRoot = root;
-                checkRoot();
+                calculateOffset();
                 setTriad();
             }
         }
 
 
-        void checkRoot(){
-            byte rootDown = mRoot%notesPerOctave;
-            mValid = false;
-            int i;
-            byte note = key;
-            for (i=0; i<notesPerScale; i++){
-                rootDown = (rootDown+minorHalfSteps[i])%notesPerOctave;
-                if (rootDown == note){ 
-                    mValid = true;
-                    return;
-            }
-        }
 
-
+        //*******************************************************
+        //GETTERS
+        //*******************************************************
         byte getRoot(){
             return mRoot;
         }
         byte getKey(){
             return mKey;
         }
-
         bool getValid(){
             return mValid;
         }
@@ -85,25 +79,52 @@ class ChordMaker{
         }
 
     private:
+        int mOffset;
+
+        //offset in tems of notes IN THE SCALE, used to figure out where we are in the half step array
+        void calculateOffset() {
+
+            byte rootMod = mRoot % notesPerOctave;
+            int offset = 0;
+            byte note = mKey;
+            while (note > rootMod) rootMod = rootMod + notesPerOctave;
+            while (note < rootMod) {
+                note = note + minorHalfSteps[offset];
+                offset++;
+            }
+            mOffset = offset;
+
+            //we must hit it EXACTLY to be valid
+            if (note == rootMod){ 
+                mValid = true;
+            }
+            else {
+                mValid = false;
+            }
+            
+        }
+
+
+
         void setTriad(){
             //skip if already set
             if (mValid ==false) {
                 clearTriad();
             } else {
                 //get the position in the scale
-                int diff = (mRoot - mKey) %notesPerOctave;//key should always be from 0 to 11 (notes per octave)
-                if (diff < 0 ) {diff = diff +notesPerOctave;} //prevent negatives
+                //int offset = calculateOffset();  
 
                 //triads are formed with the first third and fith note in a scale couting from the root note
                 //find the triad by adding the steps for the next to notes in the scale
                 int i;
                 mTriadMiddle=mRoot;
-                for (i=0;i<3 i++){
-                    mTriadMiddle = minorHalfSteps[(i+diff)%notesPerScale];
+                const int switchAt = 2;
+                for (i = 0; i < switchAt; i++) {
+                    mTriadMiddle = mTriadMiddle+ minorHalfSteps[(i+ mOffset)%notesPerScale];
                 }
-                mTriad[2] = mTriad[1];
-                for (i=3;i<5 i++){
-                    mTriadLast = minorHalfSteps[(i+diff)%notesPerScale];
+                mTriadLast = mTriadMiddle;
+                for (i = switchAt; i < 4; i++) {
+                    mTriadLast = mTriadLast+ minorHalfSteps[(i+ mOffset)%notesPerScale];
                 }
             }
             
@@ -111,6 +132,7 @@ class ChordMaker{
 
 
         void clearTriad(){
+            mTriadFirst = mKey;
             mTriadMiddle = mKey;
             mTriadLast = mKey;
         }
@@ -118,6 +140,20 @@ class ChordMaker{
         
 };
 
+const byte ChordMaker::minorHalfSteps[notesPerScale] = { 2,1,2,2,1,2,2 };
 
+//cminor is 0 3 7
+//d         2 5 8
+//dS        3 7 10
+//
+
+//
+
+//expected diffs
+//middle {3,3,4,3,3,4,4}
+//last = middle + {4,3,3,4,4,3,3} = 
+//last ={7,6,7,7,7,7,7}
+
+// {7, 6 
 
 #endif

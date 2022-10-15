@@ -3,3 +3,8 @@
 ################################################################################
 
 /monstermidi/.vs
+/monstermidi/x64/Debug
+/monstermidi/vsproj.vcxproj.user
+/monstermidi/vsproj.vcxproj.filters
+/monstermidi/vsproj.vcxproj
+/monstermidi/vsproj.sln

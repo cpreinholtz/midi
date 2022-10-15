@@ -2,7 +2,4 @@
 #define TEST_H
 
 
-typedef uint8_t byte ;
-
-
 #endif
