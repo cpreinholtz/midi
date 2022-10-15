@@ -34,7 +34,7 @@ int tt(byte root, byte key, ChordMaker chordMaker, int expectedOffset){
     if (chordMaker.getOffset() != expectedOffset) return 3;
     if (expectedMiddle != triadMiddle) return 4;
     if (expectedLast != triadLast) return 5;
-
+    if (key != chordMaker.getKey()) return 6;
 
     cout << "triad is: " << unsigned(root) << " " << unsigned(triadMiddle) << " " << unsigned(triadLast)
         << " \tdiff is: " << 
@@ -49,26 +49,38 @@ int triad_test() {
     int  e=0;
     byte root =0;
     byte key = 0;
+    byte used[7] = { 0,2,3,5,7,8,10 };
+    byte unused[5] = { 1,4,6,9,11 };
     
     ChordMaker chordMaker;
-    chordMaker.setKey(key);    
-    cout << "key is: " << key << "minor" << endl;
 
-    root=key;
-    e = e + tt(root,key,chordMaker,0 );
+
+    for(key = 0; key < 12; key++){
+        
+        //check triads
+        root=key;
+        e = e + tt(root,key,chordMaker,0 );
+        cout<<"key is: "<<unsigned(key)<<endl;    
+        for (int i =0; i<chordMaker.notesPerScale *2; i++){        
+            root = root+chordMaker.minorHalfSteps[i% chordMaker.notesPerScale];
+            e = e + tt(root,key, chordMaker, (i+1) % chordMaker.notesPerScale);
+        }
+
+        //check for proper silencing.
+        for (int i=0; i<5; i++){
+            chordMaker.setKey(key);
+            chordMaker.setRoot((unused[i]+key)%12);
+            if (chordMaker.getValid()) e++;
+            chordMaker.setRoot((unused[i]+key)+2*12);
+            if (chordMaker.getValid()) e++;
+        }
+        cout << "key was: " << unsigned(key) << " errors:  " << e << endl << endl;
+
+    }
 
     
-    for (int i =0; i<chordMaker.notesPerScale; i++){        
-        root = root+chordMaker.minorHalfSteps[i];
-        e = e + tt(root,key, chordMaker, (i+1) % chordMaker.notesPerScale);
-    }
 
-    for (int i =0; i<chordMaker.notesPerScale; i++){        
-        root = root+chordMaker.minorHalfSteps[i];
-        e = e + tt(root,key, chordMaker, (i + 1) % chordMaker.notesPerScale);
-    }
-
-    if (key!=chordMaker.getKey()) e++;
+    //if (key!=chordMaker.getKey()) e++;
     cout << "errors:  " << e << endl;
     return e;
 }
