@@ -33,6 +33,7 @@ private:
 	GuardedFloat mBpm;
 	GuardedInt mDiv;
 	bool mGateStatus;
+	bool mRunning;
 	int mCurrentNote;
 
 public:
@@ -41,15 +42,18 @@ public:
 	//**************************************************************
 	Arpegio() {		
 		mBpm.setGuards(250.0, 5.0);
-		setBpm(120.0);
-
-		mDiv.setGuards(64, 1);		
-		setDiv(1);
-
+		mDiv.setGuards(64, 1);
 		mGatePercent.setGuards(99, 1);
+
+		mDiv = 1; //prevent div0
+		setBpm(120.0);		
+		setDiv(1);		
 		setGatePercent(50);
 
+		mNotes.clear();
 		mCurrentNote = 0;
+		mRunning = false;
+		mGateStatus = false;
 	}
 
 	//**************************************************************
@@ -69,29 +73,33 @@ public:
 		mGateTimer.startTick();
 		mGateStatus = true;
 		mCurrentNote = 0;
+		mRunning = true;
 	}
 
 	void stop() {
-		mGateStatus = false;
+		mGateStatus = true;
 	}
 
-	void service() {
-		if (mGateStatus == true) {
+
+	bool service() {
+		if (mNotes.getActiveNotes() <= 0) { return false; }
+		else if (mGateStatus == true) {
 			if (mGateTimer.pollAndReset()) {
 				mGateStatus = false;
+				return true;
 			}
 		}
 		else if (mGateStatus == false) {
 			if (mNoteTimer.pollAndReset()) {
 				updateCurrentNote();
+				mGateStatus = true;
 				mGateTimer.startTick();
+				return true;
 			}
 		}
+		return false;
 	}
 
-	Note get() {
-		return mNotes.get(mCurrentNote);
-	}
 
 
 
@@ -116,6 +124,13 @@ public:
 	//**************************************************************
 	// getters
 	//**************************************************************
+	Note get() {
+		return mNotes.get(mCurrentNote);
+	}
+
+	bool getGateStatus() {
+		return mGateStatus;
+	}
 
 
 
@@ -140,7 +155,9 @@ private:
 		checkCurrentNote();
 	}
 	void checkCurrentNote() {
-		if (mCurrentNote > mNotes.getActiveNotes()) mCurrentNote = 0;
+		if (mCurrentNote >= mNotes.getActiveNotes()) mCurrentNote = 0;
 	}
 };
+
+
 

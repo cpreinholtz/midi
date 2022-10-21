@@ -3,6 +3,7 @@ typedef uint8_t byte;
 #include <iostream>
 #include <chord_maker.h>
 #include <mock_arduino.h>
+#include <arpegio.h>
 
 using namespace std;
 
@@ -87,12 +88,36 @@ int triad_test() {
 }
 
 
+int arpegioTest() {
+    Arpegio arp;
+    arp.start();
+
+    arp.noteOn(1,100);
+    arp.noteOn(3, 34);
+    arp.noteOn(5,43);
+
+
+    for (int i = 0; i < 10; ) {
+        if (arp.service()) {
+            if (arp.getGateStatus()==true) {
+                cout << "arp on " << unsigned(arp.get().mNote)<< endl;
+            } else { 
+                cout << " arp off " << unsigned(arp.get().mNote )<< endl; 
+            }
+            i++;
+        }
+    }
+    return 100;
+}
+
 
 int run_tests() {
     initialize_mock_arduino();
 
     int e = 0;
-    e=e+triad_test();
+    //e=e+triad_test();
+
+    e = e + arpegioTest();
 
 
     cout << "press enter to continue\n";
