@@ -71,18 +71,23 @@ public:
 	void start() {
 		mNoteTimer.startTick();
 		mGateTimer.startTick();
-		mGateStatus = true;
+		mGateStatus = false;//set false to prevent first not entirley TODO fix this
 		mCurrentNote = 0;
 		mRunning = true;
 	}
 
 	void stop() {
-		mGateStatus = true;
+		mRunning = false;
 	}
 
 
 	bool service() {
-		if (mNotes.getActiveNotes() <= 0) { return false; }
+		if (mRunning == false) {
+			return false;
+		}
+		else if (mNotes.getActiveNotes() <= 0) { 
+			return false; 
+		}
 		else if (mGateStatus == true) {
 			if (mGateTimer.pollAndReset()) {
 				mGateStatus = false;
