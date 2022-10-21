@@ -1,6 +1,7 @@
 
 #ifndef CHORD_MAKER_H
 #define CHORD_MAKER_H
+
 #ifdef ARDUINO_TARGET
 #else
 #include <cstdint>

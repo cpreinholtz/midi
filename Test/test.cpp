@@ -2,6 +2,7 @@
 typedef uint8_t byte;
 #include <iostream>
 #include <chord_maker.h>
+#include <mock_arduino.h>
 
 using namespace std;
 
@@ -88,8 +89,12 @@ int triad_test() {
 
 
 int run_tests() {
+    initialize_mock_arduino();
+
     int e = 0;
     e=e+triad_test();
+
+
     cout << "press enter to continue\n";
     while (cin.get() != '\n');
     return e;
