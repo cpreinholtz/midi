@@ -11,15 +11,13 @@ private:
     Timer mInTimer;
     Timer mOutTimer;
     unsigned long mLastTickMicros;
-    static const int kBpmDivider = 24;
-
-
     //**************************************************************
     // misc
     //**************************************************************
 
 
 public:
+    static const int kBpmDivider = 24;
     //**************************************************************
     // Consturctors
     //**************************************************************
@@ -65,6 +63,9 @@ public:
     }
     int getMicros() const {
         return mLastTickMicros;
+    }
+    int getQuarterNoteBpm() const {
+        return microsToBpm(mLastTickMicros) * kBpmDivider;
     }
 
 
