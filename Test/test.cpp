@@ -87,6 +87,27 @@ int triad_test() {
     return e;
 }
 
+#include <midi_clk.h>
+int conversionTest() {
+    MidiClk clk;
+    float bpm = 45.0;
+    float bps = bpm / 60.0;//min to sec
+    float spb = 1 / bps;//change from freq to hz
+    float expectedPeriodMicros =  1e6 * (spb);//sec to micros
+    unsigned long got = bpmToMicros(bpm);
+    cout << expectedPeriodMicros << " <expected VS bpmToMicros program> " << got << endl;
+    cout << bpm << " <expected VS microsToBpm program> " << microsToBpm(got) << endl;
+    cout << bpm/60.0 << " <expected VS bpmToBps program> " << bpmToBps(bpm) << endl;
+
+
+    float micros = 5e5;
+
+    cout << 2 << " <expected VS microsToBps program> " << microsToBps(micros) << endl;
+
+    return 0; //TODO make self checking...
+
+}
+
 
 int arpegioTest() {
     Arpegio arp;
@@ -117,7 +138,8 @@ int run_tests() {
     int e = 0;
     //e=e+triad_test();
 
-    e = e + arpegioTest();
+    //e = e + arpegioTest();
+    e = e + conversionTest();
 
 
     cout << "press enter to continue\n";

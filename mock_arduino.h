@@ -20,5 +20,7 @@ public:
 
 extern FakeSerial Serial;
 
+extern const unsigned char MIDI_SYSRT_CLK[];
+
 
 

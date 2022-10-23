@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <mock_arduino.h>
 
+const unsigned char MIDI_SYSRT_CLK[] = "MIDICLK\n";
 timeb t_start;
 unsigned long millis() {
 	timeb t_now;

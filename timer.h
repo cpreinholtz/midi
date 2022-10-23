@@ -8,16 +8,35 @@
 #include <mock_arduino.h>
 #endif
 
-float bpmToFreq(float bpm){
+float bpmToBps(float bpm){
     float bps = bpm / 60.0;
     return bps;
 }
 
 
 unsigned long bpmToMicros(float bpm) {
-    unsigned long micros = unsigned long( 1000000 * bpmToFreq(bpm));
+    //micros/beat =  1e6/ bps
+    unsigned long micros = unsigned long( 1000000 / bpmToBps(bpm));
     return micros;
 }
+
+float microsToBps(unsigned long micros) {
+    //Bps  =   1/ ( sec/micro * micros/beat)
+    // = 1/ ( 1/1e6 * micros/beat)
+    // = 1/ (micros/1e6) 
+    // =  1e6/micros
+    float bps = 1000000.0 / ((float)micros);
+    return bps;
+}
+
+float microsToBpm (unsigned long micros) {
+    float bpm = 60.0 * microsToBps(micros);
+    return bpm;
+}
+
+
+
+
 
 
 //This class is used to perform actions at regular intervals

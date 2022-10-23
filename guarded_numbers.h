@@ -12,7 +12,7 @@ private:
 
 public:
 	GuardedFloat() {
-		setGuards(1.0, 0.0);
+		setGuards(1.0, 0.1);
 		set(mMin);
 	}
 
@@ -52,7 +52,7 @@ private:
 
 public:
 	GuardedInt() {
-		setGuards(10, 0);
+		setGuards(10, 1);
 		set(mMin);
 	}
 

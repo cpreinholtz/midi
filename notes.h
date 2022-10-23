@@ -172,6 +172,17 @@ public:
         }
     }
 
+    //this function allows for FIFO type operation, 
+    //0 is the FIRST note we recieved, 1 is the Next etc
+    Note getFifo(int i = 0) const {
+        if (i < 0 or i >= mActiveNotes) {
+            return kDefaultEmptyNote;
+        }
+        else {
+            return mNotes[mActiveNotes -1 - i];
+        }
+    }
+
     int getActiveNotes() const{
         return mActiveNotes;
     }
