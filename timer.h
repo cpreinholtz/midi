@@ -102,9 +102,10 @@ public:
         return isDone;
     }
 
-    void setPeriodToCurrentMicrosAndReset() {
+    unsigned long setPeriodToCurrentMicrosAndReset() {
         mPeriodMicros = micros() - mStartedMicros;        
-        startTick();        
+        startTick();  
+        return mPeriodMicros;
     }
 
 

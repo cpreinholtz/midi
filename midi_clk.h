@@ -36,9 +36,9 @@ public:
     //**************************************************************
     //recieved a midi clk pulse
     void tickIn() {
-        unsigned long thisTickMicros = mInTimer.getCurrentMicros();
-        mOutTimer.setPeriodMicros(thisTickMicros);
-        mInTimer.startTick();
+        mLastTickMicros = mInTimer.setPeriodToCurrentMicrosAndReset();
+        mOutTimer.setPeriodMicros(mLastTickMicros);
+        //mInTimer.startTick();
     }
 
 

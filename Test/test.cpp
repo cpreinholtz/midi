@@ -4,6 +4,7 @@ typedef uint8_t byte;
 #include <chord_maker.h>
 #include <mock_arduino.h>
 #include <arpegio.h>
+#include <midi_clk.h>
 
 using namespace std;
 
@@ -87,9 +88,29 @@ int triad_test() {
     return e;
 }
 
-#include <midi_clk.h>
-int conversionTest() {
+
+int clktest(float dly) {
     MidiClk clk;
+    cout << "clk start (setting period by sending ticks)" << endl;
+    clk.tickIn();
+    delay(dly);
+    clk.tickIn();
+    cout << "clk bpm" << clk.getBpm() << endl;
+    cout << "clk micros" << clk.getMicros() << endl;
+    clk.service();
+    cout << "clk get (get service delay by polling)" << endl;
+    while (clk.service() == false) {
+        ;
+    }
+    cout << "clk end" << endl;
+    if (clk.getMicros() == dly * 1000) return 0;
+    else return 4385297;
+}
+
+
+int conversionTest() {
+
+
     float bpm = 45.0;
     float bps = bpm / 60.0;//min to sec
     float spb = 1 / bps;//change from freq to hz
@@ -107,6 +128,7 @@ int conversionTest() {
     return 0; //TODO make self checking...
 
 }
+
 
 
 int arpegioTest() {
@@ -139,7 +161,9 @@ int run_tests() {
     //e=e+triad_test();
 
     //e = e + arpegioTest();
-    e = e + conversionTest();
+    //e = e + conversionTest();
+    e = e + clktest(5000);//milliseconds
+    e = e + clktest(1000);//milliseconds();
 
 
     cout << "press enter to continue\n";
