@@ -16,7 +16,7 @@ float bpmToBps(float bpm){
 
 unsigned long bpmToMicros(float bpm) {
     //micros/beat =  1e6/ bps
-    unsigned long micros = unsigned long( 1000000 / bpmToBps(bpm));
+    unsigned long micros = (unsigned long) ( 1000000 / bpmToBps(bpm));
     return micros;
 }
 

@@ -150,7 +150,7 @@ private:
 	}
 
 	void updateGateTimer() {
-		unsigned long micros = mNoteTimer.getPeriodMicros() * unsigned long(mGatePercent.get()) / 100;
+		unsigned long micros = mNoteTimer.getPeriodMicros() * (unsigned long) (mGatePercent.get()) / 100;
 		mGateTimer.setPeriodMicros(micros);
 	}
 
