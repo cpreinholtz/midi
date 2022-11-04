@@ -129,11 +129,15 @@ public:
 	//**************************************************************
 	// getters
 	//**************************************************************
-	Note get() {
+	Note get () const {
 		return mNotes.get(mCurrentNote);
 	}
 
-	bool getGateStatus() {
+	float getBpm () const{
+		return mBpm.get();
+	}
+
+	bool getGateStatus () const{
 		return mGateStatus;
 	}
 
