@@ -65,7 +65,8 @@ public:
         return mLastTickMicros;
     }
     int getQuarterNoteBpm() const {
-        return microsToBpm(mLastTickMicros) * kBpmDivider;
+        return microsToBpm(mLastTickMicros * kBpmDivider) ;
+        //Serial.println("getQuarterNoteBpm");
     }
 
 
