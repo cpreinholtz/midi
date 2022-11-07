@@ -11,11 +11,11 @@ void initialize_mock_arduino();
 
 class FakeSerial {
 public:
-	void begin(unsigned long);
-	void end();
-	size_t write(const unsigned char*, size_t);
-	void println(const char*);
-	void println(unsigned long);
+    void begin(unsigned long);
+    void end();
+    size_t write(const unsigned char*, size_t);
+    void println(const char*);
+    void println(unsigned long);
 };
 
 extern FakeSerial Serial;
